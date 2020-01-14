@@ -1,0 +1,23 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+    
+    RewriteEngine On
+    # RewriteCond %{HTTPS} off
+    # RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]    
+
+    #static files
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    RewriteCond %{REQUEST_URI} !(\.css|\.js|\.json|\.png|\.jpg|\.jpeg|\.svg|\.gif|robots\.txt|\.otf|\.ttf|\.woff|\.woff2|\.txt)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(css|js|fonts|img|libs|json|docs)/(.*)$ public/$1/$2 [L,NC]
+</IfModule>
