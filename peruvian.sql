@@ -4,22 +4,10 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
-
--- -----------------------------------------------------
--- Table `mydb`.`business`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`business` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`business` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `ruc` INT(11) NULL,
+  `ruc` VARCHAR (11) NULL,
   `name` VARCHAR(80) NULL,
   `telephone_one` VARCHAR(80) NULL,
   `telephone_two` VARCHAR(80) NULL,
@@ -33,9 +21,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`user`
+-- Table `peruvian`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`user` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `business_id` INT NOT NULL,
   `email` VARCHAR(200) NULL,
@@ -47,16 +35,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
   INDEX `fk_user_business_idx` (`business_id` ASC),
   CONSTRAINT `fk_user_business`
     FOREIGN KEY (`business_id`)
-    REFERENCES `mydb`.`business` (`id`)
+    REFERENCES `peruvian`.`business` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`customer`
+-- Table `peruvian`.`customer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`customer` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`customer` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fb_id` VARCHAR(80) NULL,
   `fullname` VARCHAR(200) NULL,
@@ -73,9 +61,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`category`
+-- Table `peruvian`.`category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`category` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`category` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(80) NULL,
   `status` TINYINT NULL DEFAULT 1,
@@ -86,9 +74,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`product`
+-- Table `peruvian`.`product`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`product` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`product` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `category_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
@@ -105,21 +93,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`product` (
   INDEX `fk_product_customer1_idx` (`customer_id` ASC),
   CONSTRAINT `fk_product_category1`
     FOREIGN KEY (`category_id`)
-    REFERENCES `mydb`.`category` (`id`)
+    REFERENCES `peruvian`.`category` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_product_customer1`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `mydb`.`customer` (`id`)
+    REFERENCES `peruvian`.`customer` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`recommendation`
+-- Table `peruvian`.`recommendation`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`recommendation` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`recommendation` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
   `created_at` DATETIME NULL,
@@ -128,16 +116,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`recommendation` (
   INDEX `fk_recommendation_product1_idx` (`product_id` ASC),
   CONSTRAINT `fk_recommendation_product1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `mydb`.`product` (`id`)
+    REFERENCES `peruvian`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`product_recommendation`
+-- Table `peruvian`.`product_recommendation`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`product_recommendation` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`product_recommendation` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
   `recommendation_id` INT NOT NULL,
@@ -148,21 +136,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`product_recommendation` (
   INDEX `fk_product_recommendation_recommendation1_idx` (`recommendation_id` ASC),
   CONSTRAINT `fk_product_recommendation_product1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `mydb`.`product` (`id`)
+    REFERENCES `peruvian`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_product_recommendation_recommendation1`
     FOREIGN KEY (`recommendation_id`)
-    REFERENCES `mydb`.`recommendation` (`id`)
+    REFERENCES `peruvian`.`recommendation` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`sale`
+-- Table `peruvian`.`sale`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`sale` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`sale` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `customer_id` INT NOT NULL,
   `registration_date` DATE NULL,
@@ -180,16 +168,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`sale` (
   INDEX `fk_sale_customer1_idx` (`customer_id` ASC),
   CONSTRAINT `fk_sale_customer1`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `mydb`.`customer` (`id`)
+    REFERENCES `peruvian`.`customer` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`sale_detail`
+-- Table `peruvian`.`sale_detail`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`sale_detail` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`sale_detail` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `sale_id` INT NOT NULL,
   `product_id` INT NOT NULL,
@@ -202,21 +190,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`sale_detail` (
   INDEX `fk_sale_detail_product1_idx` (`product_id` ASC),
   CONSTRAINT `fk_sale_detail_sale1`
     FOREIGN KEY (`sale_id`)
-    REFERENCES `mydb`.`sale` (`id`)
+    REFERENCES `peruvian`.`sale` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_sale_detail_product1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `mydb`.`product` (`id`)
+    REFERENCES `peruvian`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`color`
+-- Table `peruvian`.`color`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`color` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`color` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(80) NULL,
   `status` TINYINT NULL DEFAULT 1,
@@ -227,9 +215,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`product_color`
+-- Table `peruvian`.`product_color`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`product_color` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`product_color` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
   `color_id` INT NOT NULL,
@@ -240,21 +228,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`product_color` (
   INDEX `fk_product_color_color1_idx` (`color_id` ASC),
   CONSTRAINT `fk_product_color_product1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `mydb`.`product` (`id`)
+    REFERENCES `peruvian`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_product_color_color1`
     FOREIGN KEY (`color_id`)
-    REFERENCES `mydb`.`color` (`id`)
+    REFERENCES `peruvian`.`color` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`photos`
+-- Table `peruvian`.`photos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`photos` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`photos` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `image` VARCHAR(300) NULL,
   `product_color_id` INT NOT NULL,
@@ -262,16 +250,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`photos` (
   INDEX `fk_photos_product_color1_idx` (`product_color_id` ASC),
   CONSTRAINT `fk_photos_product_color1`
     FOREIGN KEY (`product_color_id`)
-    REFERENCES `mydb`.`product_color` (`id`)
+    REFERENCES `peruvian`.`product_color` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`history`
+-- Table `peruvian`.`history`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`history` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`history` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(80) NULL,
   `description` VARCHAR(500) NULL,
@@ -285,16 +273,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`history` (
   INDEX `fk_history_user1_idx` (`user_id` ASC),
   CONSTRAINT `fk_history_user1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`user` (`id`)
+    REFERENCES `peruvian`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`banner`
+-- Table `peruvian`.`banner`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`banner` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`banner` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(80) NULL,
   `slogan` VARCHAR(80) NULL,
@@ -306,9 +294,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`payment`
+-- Table `peruvian`.`payment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`payment` (
+CREATE TABLE IF NOT EXISTS `peruvian`.`payment` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `sale_id` INT NOT NULL,
   `amount` DECIMAL(10,2) NULL,
@@ -319,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`payment` (
   INDEX `fk_payment_sale1_idx` (`sale_id` ASC),
   CONSTRAINT `fk_payment_sale1`
     FOREIGN KEY (`sale_id`)
-    REFERENCES `mydb`.`sale` (`id`)
+    REFERENCES `peruvian`.`sale` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
